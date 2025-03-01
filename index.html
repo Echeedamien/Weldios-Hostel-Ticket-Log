@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Weldios Hostel Ticket Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="messageDiv"></div>
+    <div class="container">
+        <h2>Weldios Hostel Ticket Log</h2>
+        <form id="ticketForm">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" required>
+            
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
+            
+            <label for="room">Room Number:</label>
+            <input type="text" id="room" required>
+            
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" required>
+            
+            <label for="complaint">Complaint Type:</label>
+            <select id="complaint" required>
+                <option value="">Select</option>
+                <option value="Plumbing">Plumbing</option>
+                <option value="Electricity">Electricity</option>
+                <option value="Cleanliness">Cleanliness</option>
+                <option value="Others">Others</option>
+            </select>
+            
+            <label for="details">Details of Complaint:</label>
+            <textarea id="details" rows="4" required></textarea>
+            
+            <button type="button" onclick="submitComplaint()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        async function submitComplaint() {
+            const name = document.getElementById("name").value;
+            const date = document.getElementById("date").value;
+            const room = document.getElementById("room").value;
+            const email = document.getElementById("email").value;
+            const complaint = document.getElementById("complaint").value;
+            const details = document.getElementById("details").value;
+            
+            if (!name || !date || !room || !email || !complaint || !details) {
+                alert("Please fill in all fields");
+                return;
+            }
+            
+            const response = await fetch("http://localhost:5005/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, date, room, email, complaint, details })
+});
+
+            
+            if (response.ok) {
+                messageDiv.innerHTML = `<p style="color: green;">Complaint submitted successfully!</p>`;
+            document.getElementById("ticketForm").reset();
+        } else {
+            messageDiv.innerHTML = `<p style="color: red;">Error submitting complaint. Try again.</p>`;
+        }
+    }
+</script>
+</body>
+</html>
