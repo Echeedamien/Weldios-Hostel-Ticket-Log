@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Reports</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { background: white; padding: 20px; max-width: 800px; margin: auto; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #007BFF; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Hostel Complaints Report</h2>
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Room</th>
+                    <th>Email</th>
+                    <th>Complaint</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchReports() {
+            const response = await fetch("http://localhost:5005/report");
+            const complaints = await response.json();
+            const tableBody = document.querySelector("#reportTable tbody");
+            
+            complaints.forEach(complaint => {
+                const row = `<tr>
+                    <td>${complaint.name}</td>
+                    <td>${complaint.date}</td>
+                    <td>${complaint.room}</td>
+                    <td>${complaint.email}</td>
+                    <td>${complaint.complaint}</td>
+                    <td>${complaint.details}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        fetchReports();
+    </script>
+</body>
+</html>
