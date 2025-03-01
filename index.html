@@ -3,29 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Weldios Hostel Ticket Log</title>
+    <title>Weldios Hostel Ticket Log</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
         }
+
+        /* Watermark background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('image.png') no-repeat center center;
+            background-size: cover; /* Covers the whole page */
+            background-attachment: fixed; /* Keeps it stable */
+            opacity: 0.2; /* Adjust for better visibility */
+            z-index: -1; /* Sends it behind everything */
+        }
+
         .container {
             background: white;
             padding: 20px;
             max-width: 500px;
-            margin: auto;
+            width: 90%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
+            position: relative;
+            z-index: 1; /* Ensure it's above the watermark */
         }
+
+        .logo {
+            width: 120px; /* Adjust size */
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            text-align: left;
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
         input, textarea, select {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
             background: blue;
             color: white;
@@ -33,13 +75,17 @@
             border: none;
             cursor: pointer;
             width: 100%;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div id="messageDiv"></div>
+
     <div class="container">
+        <!-- Top logo -->
+        <img src="image.png" alt="Weldios Logo" class="logo">
         <h2>Weldios Hostel Ticket Log</h2>
+
         <form id="ticketForm">
             <label for="name">Full Name:</label>
             <input type="text" id="name" required>
@@ -69,34 +115,5 @@
         </form>
     </div>
 
-    <script>
-        async function submitComplaint() {
-            const name = document.getElementById("name").value;
-            const date = document.getElementById("date").value;
-            const room = document.getElementById("room").value;
-            const email = document.getElementById("email").value;
-            const complaint = document.getElementById("complaint").value;
-            const details = document.getElementById("details").value;
-            
-            if (!name || !date || !room || !email || !complaint || !details) {
-                alert("Please fill in all fields");
-                return;
-            }
-            
-            const response = await fetch("http://localhost:5005/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, date, room, email, complaint, details })
-});
-
-            
-            if (response.ok) {
-                messageDiv.innerHTML = `<p style="color: green;">Complaint submitted successfully!</p>`;
-            document.getElementById("ticketForm").reset();
-        } else {
-            messageDiv.innerHTML = `<p style="color: red;">Error submitting complaint. Try again.</p>`;
-        }
-    }
-</script>
 </body>
 </html>
